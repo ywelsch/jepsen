@@ -38,7 +38,7 @@
 (defn local-ip
   "The local node's eth0 address"
   []
-  (nth (->> (exec :ifconfig "eth0")
+  (nth (->> (exec :until :ifconfig "eth0" (lit ";") :do :sleep 1 (lit ";") :done)
             (re-find #"inet addr:(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"))
        1))
 
