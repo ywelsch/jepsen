@@ -241,7 +241,13 @@
             (-> "jvm.options"
                 io/resource
                 slurp)
-            :> (str base-dir "/config/jvm.options")))
+            :> (str base-dir "/config/jvm.options"))
+
+    (c/exec :echo
+            (-> "logging.yml"
+                io/resource
+                slurp)
+            :> (str base-dir "/config/logging.yml")))
   (info node "configured"))
 
 (defn start!
