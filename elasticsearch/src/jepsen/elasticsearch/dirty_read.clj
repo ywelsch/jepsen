@@ -110,7 +110,7 @@
   Also verifies that every successful write is present in the strong read set."
   []
   (reify checker/Checker
-    (check [checker test model history opts]
+    (check [checker test history opts]
       (let [ok    (filter op/ok? history)
             writes (->> ok
                         (filter #(= :write (:f %)))

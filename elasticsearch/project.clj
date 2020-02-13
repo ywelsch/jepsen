@@ -3,10 +3,10 @@
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.8.0"]
-                 [clj-http "3.1.0"]
-                 [cheshire "5.6.2"]
-                 [jepsen "0.1.3-SNAPSHOT"]
+  :dependencies [[org.clojure/clojure "1.10.0"]
+                 [clj-http "3.7.0"]
+                 [cheshire "5.8.0"]
+                 [jepsen "0.1.18-SNAPSHOT"]
                  [org.elasticsearch.client/transport "5.0.0-alpha5"]]
   :jvm-opts ["-Xmx32g"
              "-XX:+UseConcMarkSweepGC"

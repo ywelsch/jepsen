@@ -9,7 +9,6 @@
                     [control   :as c :refer [|]]
                     [client    :as client]
                     [checker   :as checker]
-                    [model     :as model]
                     [generator :as gen]
                     [nemesis   :as nemesis]
                     [store     :as store]
