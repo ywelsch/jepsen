@@ -25,8 +25,10 @@
            (org.elasticsearch.common.unit TimeValue)
            (org.elasticsearch.common.settings
              Settings)
+           (org.elasticsearch.common.xcontent
+             XContentType)
            (org.elasticsearch.common.transport
-             InetSocketTransportAddress)
+             TransportAddress)
            (org.elasticsearch.client.transport
              TransportClient)
            (org.elasticsearch.transport.client
@@ -72,7 +74,7 @@
              (put "client.transport.sniff" false)
              (build))
          (make-array Class 0))
-      (addTransportAddress (InetSocketTransportAddress.
+      (addTransportAddress (TransportAddress.
                              (InetAddress/getByName (name node)) 9300))))
 
 (defn es-connect
@@ -102,7 +104,7 @@
   (assert (:id doc))
   (let [res (-> client
                 (.prepareIndex index type (str (:id doc)))
-                (.setSource (json/generate-string doc))
+                (.setSource (json/generate-string doc) XContentType/JSON)
                 (.get))]; why not execute/actionGet?
     (when-not (= RestStatus/CREATED (.status res))
       (throw (RuntimeException. "Document not created")))
@@ -139,9 +141,9 @@
           (->> hits
                seq
                (map (fn [hit]
-                      {:id      (.id hit)
-                       :version (.version hit)
-                       :source  (map->kw-map (.getSource hit))}))
+                      {:id      (.getId hit)
+                       :version (.getVersion hit)
+                       :source  (map->kw-map (.getSourceAsMap hit))}))
                (into results))
           (-> client
               (.prepareSearchScroll (.getScrollId scroll))
@@ -212,7 +214,6 @@
   "Install elasticsearch"
   [node tarball-url]
   (c/su
-    (debian/install-jdk8!)
     (cu/ensure-user! user)
     (cu/install-tarball! node tarball-url base-dir false)
     (c/exec :chown :-R (str user ":" user) base-dir)))
@@ -232,8 +233,13 @@
                                                 (count (:nodes test)))))
                 (str/replace "$HOSTS"
                              (json/generate-string
-                               (vals (c/on-nodes test (fn [_ _]
-                                                        (cnet/local-ip)))))))
+                               (vals (c/on-nodes test (fn [_ node]
+                                                        (name node))))))
+                (str/replace "$INITIAL_MASTERS"
+                             (json/generate-string
+                               (vals (c/on-nodes test (fn [_ node]
+                                                        (name node))))))
+              )
             :> (str base-dir "/config/elasticsearch.yml"))
 
     (c/exec :echo
@@ -256,7 +262,7 @@
                                    :pidfile pidfile
                                    :chdir   base-dir}
                                   "bin/elasticsearch")))
-  (wait node 60 :green)
+  (wait node 120 :green)
   (info node "elasticsearch ready"))
 
 (defn stop!
@@ -300,7 +306,7 @@
   [error]
   (and
    (-> error .getData :status (= 400))
-   (re-find #"IndexAlreadyExistsException"
+   (re-find #"ResourceAlreadyExistsException"
             (http-error error))))
 
 ;(defn await-client

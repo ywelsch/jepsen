@@ -7,7 +7,7 @@
                  [clj-http "3.7.0"]
                  [cheshire "5.8.0"]
                  [jepsen "0.1.18-SNAPSHOT"]
-                 [org.elasticsearch.client/transport "5.0.0-alpha5"]]
+                 [org.elasticsearch.client/transport "7.6.0"]]
   :jvm-opts ["-Xmx32g"
              "-XX:+UseConcMarkSweepGC"
              "-XX:+UseParNewGC"

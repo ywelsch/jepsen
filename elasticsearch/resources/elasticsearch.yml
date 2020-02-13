@@ -7,15 +7,18 @@ gateway.expected_nodes: $N
 indices.recovery.recovery_activity_timeout: 3s
 indices.recovery.internal_action_timeout: 3s
 indices.recovery.internal_action_long_timeout: 6s
-discovery.zen.minimum_master_nodes: $MAJORITY
-discovery.zen.ping.unicast.hosts: $HOSTS
-discovery.zen.ping_timeout: 1s
-discovery.zen.publish_timeout: 3s
-# Must be divisible by two, or elasticsearch will create a fractional value somewhere in its guts, then explode
-discovery.zen.join_timeout: 6s
-discovery.zen.fd.ping_timeout: 1s
-discovery.zen.fd.ping_retries: 2
-discovery.zen.fd.ping_interval: 1s
+cluster.initial_master_nodes: $INITIAL_MASTERS
+discovery.seed_hosts: $INITIAL_MASTERS
+transport.connect_timeout: 10s
+cluster.publish.timeout: 3s
+cluster.join.timeout: 6s
+cluster.fault_detection.leader_check.timeout: 1s
+cluster.fault_detection.leader_check.retry_count: 2
+cluster.fault_detection.leader_check.interval: 1s
+cluster.fault_detection.follower_check.timeout: 1s
+cluster.fault_detection.follower_check.retry_count: 2
+cluster.fault_detection.follower_check.interval: 1s
+
 
 # ======================== Elasticsearch Configuration =========================
 #

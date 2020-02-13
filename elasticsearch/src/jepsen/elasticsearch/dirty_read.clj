@@ -45,7 +45,7 @@
                (.actionGet)
                (.isAcknowledged)
                (info :acked))
-           (catch org.elasticsearch.indices.IndexAlreadyExistsException e))
+           (catch org.elasticsearch.ResourceAlreadyExistsException e))
          (client es)))
 
      (invoke! [this test op]

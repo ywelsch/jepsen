@@ -35,7 +35,7 @@
 
 (deftest dirty-read-test
   (let [ts (->> #(jepsen/run! (dirty-read/test
-                                {:tarball "https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/5.0.0-alpha5/elasticsearch-5.0.0-alpha5.tar.gz"
+                                {:tarball "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-7.6.0-linux-x86_64.tar.gz"
                                  :concurrency 30
                                  :time-limit 100}))
                 repeatedly
